@@ -71,7 +71,7 @@ namespace kottansTasks
                         }
                     }
                 }
-            return numericalСardNumbers.Sum(x => x) % 2 == 0;
+            return numericalСardNumbers.Sum(x => x) % 10 == 0;
         }
 
         public static string GenerateNextCreditCardNumber(string cardNumber)
