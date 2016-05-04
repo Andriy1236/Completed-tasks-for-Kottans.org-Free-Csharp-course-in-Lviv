@@ -81,12 +81,13 @@ namespace kottansTasks
             {
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
-                while (true)
+                 while (true)
                 {
                     integerСardnumber += 1;
-                    if (IsCreditCardNumberValid((integerСardnumber).ToString()))
+                    cardNumber = integerСardnumber.ToString();
+                    if (IsCreditCardNumberValid(cardNumber))
                     {
-                        return integerСardnumber.ToString();
+                        return cardNumber;
                     }
                 }
             }
