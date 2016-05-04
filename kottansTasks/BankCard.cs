@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace kottansTasks
 {
-    class BankCard
+   public static class BankCard
     {
         public static string GetCreditCardVendor(string cardNumber)
         {
