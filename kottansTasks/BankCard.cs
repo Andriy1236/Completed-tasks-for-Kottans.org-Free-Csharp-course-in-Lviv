@@ -79,19 +79,23 @@ namespace kottansTasks
           
             if (IsCreditCardNumberValid(cardNumber))
             {
+                string cardVendor = GetCreditCardVendor(cardNumber);
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
-                 while (true)
+                while (true)
                 {
                     integerСardnumber += 1;
                     cardNumber = integerСardnumber.ToString();
-                    if (IsCreditCardNumberValid(cardNumber))
+                    if (IsCreditCardNumberValid(cardNumber) && GetCreditCardVendor(cardNumber) == cardVendor)
                     {
+                       
                         return cardNumber;
                     }
+                    else
+                    {
+                        throw new Exception("no more card numbers available for this vendor");
+                    }
                 }
-            }
-            return cardNumber;
         }
 
         private static string ConvertToStringWithoutSpace(string cardNumber)
