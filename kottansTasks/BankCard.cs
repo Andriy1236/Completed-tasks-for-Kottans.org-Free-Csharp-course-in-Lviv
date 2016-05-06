@@ -23,7 +23,7 @@ namespace kottansTasks
                 }
 
                 if ((12 <= cardNumberLength && cardNumberLength <= 19) &&
-                    (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers >= 59))))
+                    (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers <= 69))))
                 {
                     cardVendor = "Maestro";
                 }
@@ -78,6 +78,10 @@ namespace kottansTasks
             if (IsCreditCardNumberValid(cardNumber))
             {
                 string cardVendor = GetCreditCardVendor(cardNumber);
+                if (cardVendor == "Unknown")
+                {
+                    throw new Exception("no more card numbers available for this vendor");
+                }
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
                 int i = 0;
@@ -90,9 +94,10 @@ namespace kottansTasks
                     {
                         return cardNumber;
                     }
+                   
                 }
-            }
-         throw new Exception("no more card numbers available for this vendor");
+              }
+            throw new Exception("no more card numbers available for this vendor");
         }
  
         private static string ConvertToStringWithoutSpace(string cardNumber)
