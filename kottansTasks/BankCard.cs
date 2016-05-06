@@ -42,8 +42,24 @@ namespace kottansTasks
                 {
                     cardVendor = "JCB";
                 }
+                if ((!(cardNumberLength == 16) && ((3528 <= firstFourNumbers && firstFourNumbers <= 3589) || (51 <= firstTwoNumbers && firstTwoNumbers <= 55)))
+
+                    ||
+
+                    (!(cardNumberLength == 15) && ((firstTwoNumbers == 34) || (firstTwoNumbers == 37)))
+
+                    ||
+
+                    (!(cardNumberLength == 13 || cardNumberLength == 16 || cardNumberLength == 19) && firstNumber == 4)
+                    ||
+                    (!(12 <= cardNumberLength && cardNumberLength <= 19) && (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers <= 69)))))
+                {
+                    throw new Exception("This is not card numder");
+                }
             }
+
             return cardVendor;
+
         }
 
         public static bool IsCreditCardNumberValid(string cardNumber)
@@ -85,21 +101,26 @@ namespace kottansTasks
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
                 int i = 0;
-                while (i < 100)
+                bool flag = true;
+                while (flag)
                 {
                     i++;
                     integerСardnumber += 1;
                     cardNumber = integerСardnumber.ToString();
+
                     if (IsCreditCardNumberValid(cardNumber) && GetCreditCardVendor(cardNumber) == cardVendor)
                     {
+                        flag = !IsCreditCardNumberValid(cardNumber);
                         return cardNumber;
                     }
-                   
+                    if (i > 100)
+                    {
+                        break;
+                    }
                 }
-              }
+            }
             throw new Exception("no more card numbers available for this vendor");
         }
- 
         private static string ConvertToStringWithoutSpace(string cardNumber)
         {
             return cardNumber.Replace(" ", "");
