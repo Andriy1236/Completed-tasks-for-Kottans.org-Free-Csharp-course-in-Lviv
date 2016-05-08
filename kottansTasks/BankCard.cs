@@ -10,8 +10,10 @@ namespace kottansTasks
         {
             cardNumber = ConvertToStringWithoutSpace(cardNumber);
             string cardVendor = "Unknown";
+
             if (IsCreditCardNumberValid(cardNumber))
             {
+
                 int cardNumberLength = cardNumber.Length;
                 int firstTwoNumbers = Convert.ToInt32(cardNumber.Substring(0, 2));
                 int firstFourNumbers = Convert.ToInt32(cardNumber.Substring(0, 4));
@@ -42,29 +44,19 @@ namespace kottansTasks
                 {
                     cardVendor = "JCB";
                 }
-                if ((!(cardNumberLength == 16) && ((3528 <= firstFourNumbers && firstFourNumbers <= 3589) || (51 <= firstTwoNumbers && firstTwoNumbers <= 55)))
-
-                    ||
-
-                    (!(cardNumberLength == 15) && ((firstTwoNumbers == 34) || (firstTwoNumbers == 37)))
-
-                    ||
-
-                    (!(cardNumberLength == 13 || cardNumberLength == 16 || cardNumberLength == 19) && firstNumber == 4)
-                    ||
-                    (!(12 <= cardNumberLength && cardNumberLength <= 19) && (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers <= 69)))))
-                {
-                    throw new Exception("This is not card numder");
-                }
             }
 
             return cardVendor;
-
         }
 
         public static bool IsCreditCardNumberValid(string cardNumber)
         {
+            int cardNumberLength = cardNumber.Length;
+            int firstTwoNumbers = Convert.ToInt32(cardNumber.Substring(0, 2));
+            int firstFourNumbers = Convert.ToInt32(cardNumber.Substring(0, 4));
+            int firstNumber = Convert.ToInt32(cardNumber.Substring(0, 1));
             cardNumber = ConvertToStringWithoutSpace(cardNumber);
+
             if (cardNumber.Any(x => x < '0' || x > '9'))
             {
                 throw new Exception("card number has letters");
@@ -73,6 +65,22 @@ namespace kottansTasks
             {
                 throw new Exception("card number has not enough numbers");
             }
+
+            if    ((!(cardNumberLength == 16) && ((3528 <= firstFourNumbers && firstFourNumbers <= 3589) || (51 <= firstTwoNumbers && firstTwoNumbers <= 55)))
+
+                  ||
+
+                  (!(cardNumberLength == 15) && ((firstTwoNumbers == 34) || (firstTwoNumbers == 37)))
+
+                  ||
+
+                  (!(cardNumberLength == 13 || cardNumberLength == 16 || cardNumberLength == 19) && firstNumber == 4)
+                  ||
+                  (!(12 <= cardNumberLength && cardNumberLength <= 19) && (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers <= 69)))))
+            {
+                throw new Exception("This is not card numder");
+            }
+
             List<int> numericalСardNumbers = new List<int>();
             numericalСardNumbers.AddRange(cardNumber.Reverse().Select(x => int.Parse(x.ToString())));
             for (int i = 0; i < numericalСardNumbers.Count; i++)
@@ -101,8 +109,9 @@ namespace kottansTasks
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
                 int i = 0;
-                bool flag = true;
-                while (flag)
+            //    bool flag = true;
+
+                while (true)
                 {
                     i++;
                     integerСardnumber += 1;
@@ -110,7 +119,7 @@ namespace kottansTasks
 
                     if (IsCreditCardNumberValid(cardNumber) && GetCreditCardVendor(cardNumber) == cardVendor)
                     {
-                        flag = !IsCreditCardNumberValid(cardNumber);
+                       // flag = !IsCreditCardNumberValid(cardNumber);
                         return cardNumber;
                     }
                     if (i > 100)
@@ -121,6 +130,7 @@ namespace kottansTasks
             }
             throw new Exception("no more card numbers available for this vendor");
         }
+
         private static string ConvertToStringWithoutSpace(string cardNumber)
         {
             return cardNumber.Replace(" ", "");
