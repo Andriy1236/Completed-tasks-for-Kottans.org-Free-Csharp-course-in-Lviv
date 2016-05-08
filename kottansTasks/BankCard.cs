@@ -4,16 +4,17 @@ using System.Linq;
 
 namespace kottansTasks
 {
-    public static class BankCard
+    public  class BankCard
     {
-        public static string GetCreditCardVendor(string cardNumber)
+        public delegate void BankCardNumberStateHandler(string message);
+        public event BankCardNumberStateHandler TestValidation;
+
+        public  string GetCreditCardVendor(string cardNumber)
         {
             cardNumber = ConvertToStringWithoutSpace(cardNumber);
             string cardVendor = "Unknown";
-
             if (IsCreditCardNumberValid(cardNumber))
             {
-
                 int cardNumberLength = cardNumber.Length;
                 int firstTwoNumbers = Convert.ToInt32(cardNumber.Substring(0, 2));
                 int firstFourNumbers = Convert.ToInt32(cardNumber.Substring(0, 4));
@@ -43,27 +44,28 @@ namespace kottansTasks
                 if (cardNumberLength == 16 && (3528 <= firstFourNumbers && firstFourNumbers <= 3589))
                 {
                     cardVendor = "JCB";
-                }
+                }              
             }
 
             return cardVendor;
+
         }
 
-        public static bool IsCreditCardNumberValid(string cardNumber)
+        public  bool IsCreditCardNumberValid(string cardNumber)
         {
+            cardNumber = ConvertToStringWithoutSpace(cardNumber);
             int cardNumberLength = cardNumber.Length;
             int firstTwoNumbers = Convert.ToInt32(cardNumber.Substring(0, 2));
             int firstFourNumbers = Convert.ToInt32(cardNumber.Substring(0, 4));
             int firstNumber = Convert.ToInt32(cardNumber.Substring(0, 1));
-            cardNumber = ConvertToStringWithoutSpace(cardNumber);
-
+          
             if (cardNumber.Any(x => x < '0' || x > '9'))
             {
-                throw new Exception("card number has letters");
+                throw new Exception("Сard number has letters");
             }
             if (cardNumber.Length < 12)
             {
-                throw new Exception("card number has not enough numbers");
+                throw new Exception("Сard number has not enough numbers");
             }
 
             if    ((!(cardNumberLength == 16) && ((3528 <= firstFourNumbers && firstFourNumbers <= 3589) || (51 <= firstTwoNumbers && firstTwoNumbers <= 55)))
@@ -78,7 +80,11 @@ namespace kottansTasks
                   ||
                   (!(12 <= cardNumberLength && cardNumberLength <= 19) && (50 == firstTwoNumbers || ((56 <= firstTwoNumbers) && (firstTwoNumbers <= 69)))))
             {
-                throw new Exception("This is not card numder");
+                if (!(TestValidation == null))
+                {
+                    TestValidation("This is  incorrect card number");
+                }
+                return false;
             }
 
             List<int> numericalСardNumbers = new List<int>();
@@ -94,10 +100,11 @@ namespace kottansTasks
                     }
                 }
             }
+
             return numericalСardNumbers.Sum(x => x) % 10 == 0;
         }
 
-        public static string GenerateNextCreditCardNumber(string cardNumber)
+        public  string GenerateNextCreditCardNumber(string cardNumber)
         {
             if (IsCreditCardNumberValid(cardNumber))
             {
@@ -109,7 +116,6 @@ namespace kottansTasks
                 cardNumber = ConvertToStringWithoutSpace(cardNumber);
                 ulong integerСardnumber = Convert.ToUInt64(cardNumber);
                 int i = 0;
-            //    bool flag = true;
 
                 while (true)
                 {
@@ -119,21 +125,22 @@ namespace kottansTasks
 
                     if (IsCreditCardNumberValid(cardNumber) && GetCreditCardVendor(cardNumber) == cardVendor)
                     {
-                       // flag = !IsCreditCardNumberValid(cardNumber);
                         return cardNumber;
                     }
                     if (i > 100)
                     {
                         break;
                     }
+
                 }
             }
             throw new Exception("no more card numbers available for this vendor");
         }
-
         private static string ConvertToStringWithoutSpace(string cardNumber)
         {
             return cardNumber.Replace(" ", "");
         }
+
+      
     }
 }
