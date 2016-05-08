@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace kottansTasks
 {
@@ -8,15 +6,18 @@ namespace kottansTasks
     {
         static void Main()
         {
-                Console.WriteLine("Hello!");
-                while (true)
-                {
+         Console.WriteLine("Hello!");
+         BankCard bankCard = new BankCard();
+         bankCard.TestValidation += Show_Message;
+
+            while (true)
+            {
                 try
                 {
                     Console.WriteLine("\nPlease Enter the card number ");
                     string cardNumber = Console.ReadLine();
-                    Console.WriteLine("The vendor is {0}", BankCard.GetCreditCardVendor(cardNumber));
-                    Console.WriteLine("next card numer is {0}", BankCard.GenerateNextCreditCardNumber(cardNumber));
+                    Console.WriteLine("The vendor is {0}", bankCard.GetCreditCardVendor(cardNumber));
+                    Console.WriteLine("next card numer is {0}", bankCard.GenerateNextCreditCardNumber(cardNumber));
                 }
                 catch (Exception e)
                 {
@@ -24,6 +25,11 @@ namespace kottansTasks
                     continue;
                 }
             }
+        }
+
+        private static void Show_Message(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
